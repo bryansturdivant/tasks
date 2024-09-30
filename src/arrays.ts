@@ -5,7 +5,17 @@
  * the number twice.
  */
 export function bookEndList(numbers: number[]): number[] {
-    return numbers;
+    let newNumbers: number[] = [];
+
+    if (numbers.length === 0) {
+        return newNumbers;
+    }
+    const firstElement = numbers[0];
+    const lastElement = numbers[numbers.length - 1];
+
+    return numbers.length > 1 ?
+            [firstElement, lastElement]
+        :   [firstElement, firstElement];
 }
 
 /**
@@ -13,7 +23,9 @@ export function bookEndList(numbers: number[]): number[] {
  * number has been tripled (multiplied by 3).
  */
 export function tripleNumbers(numbers: number[]): number[] {
-    return numbers;
+    const tripled_numbers = numbers.map((num: number): number => num * 3);
+
+    return tripled_numbers;
 }
 
 /**
@@ -21,7 +33,10 @@ export function tripleNumbers(numbers: number[]): number[] {
  * the number cannot be parsed as an integer, convert it to 0 instead.
  */
 export function stringsToIntegers(numbers: string[]): number[] {
-    return [];
+    const string_tonumber = numbers.map((string: string): number =>
+        isNaN(Number(string)) ? 0 : Number(string),
+    );
+    return string_tonumber;
 }
 
 /**
@@ -32,7 +47,14 @@ export function stringsToIntegers(numbers: string[]): number[] {
  */
 // Remember, you can write functions as lambdas too! They work exactly the same.
 export const removeDollars = (amounts: string[]): number[] => {
-    return [];
+    const remove_dollars = amounts.map((string: string): string =>
+        string.replace("$", ""),
+    );
+    const string_to_num = remove_dollars.map((string: string): number =>
+        isNaN(Number(string)) ? 0 : Number(string),
+    );
+
+    return string_to_num;
 };
 
 /**
@@ -41,7 +63,18 @@ export const removeDollars = (amounts: string[]): number[] => {
  * in question marks ("?").
  */
 export const shoutIfExclaiming = (messages: string[]): string[] => {
-    return [];
+    let check_exclaim = messages.map((message: string): string => {
+        if (message.includes("!")) {
+            return message.toUpperCase();
+        } else {
+            return message;
+        }
+    });
+
+    let check_question = check_exclaim.filter(
+        (message: string): boolean => !message.includes("?"),
+    );
+    return check_question;
 };
 
 /**
@@ -49,7 +82,7 @@ export const shoutIfExclaiming = (messages: string[]): string[] => {
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    return 0;
+    return words.filter((word) => word.length < 4).length;
 }
 
 /**
@@ -58,7 +91,9 @@ export function countShortWords(words: string[]): number {
  * then return true.
  */
 export function allRGB(colors: string[]): boolean {
-    return false;
+    return colors.every(
+        (color) => color === "red" || color === "blue" || color === "green",
+    );
 }
 
 /**
@@ -69,7 +104,18 @@ export function allRGB(colors: string[]): boolean {
  * And the array [] would become "0=0".
  */
 export function makeMath(addends: number[]): string {
-    return "";
+    let num_sum = addends.reduce(
+        (currentTotal: number, num: number): number => currentTotal + num,
+        0,
+    );
+    //let string_sum: string = num_sum.toString();
+    //let string_nums: string[] = addends.map((num:number): string=> num.toString() )
+    if (addends.length === 0) {
+        return "0=0";
+    }
+    let string_nums = addends.join("+");
+
+    return `${num_sum}=${string_nums}`;
 }
 
 /**
@@ -82,5 +128,30 @@ export function makeMath(addends: number[]): string {
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
 export function injectPositive(values: number[]): number[] {
-    return [];
+    // Calculate the sum of the values
+    let sum: number = 0;
+    let negative_found: boolean = false;
+
+    let sum_list: number[] = values.reduce(
+        (accumulator: number[], current_number: number): number[] => {
+            sum += current_number;
+            
+
+            if (current_number < 0 && !negative_found) {
+                accumulator.push(current_number);
+                accumulator.push(sum - current_number);
+                negative_found = true;
+            } else {
+                accumulator.push(current_number);
+            }
+
+            if(!negative_found){
+                accumulator.push(sum);
+            }
+            return accumulator;
+        },
+        [],
+    );
+
+    return sum_list;
 }
