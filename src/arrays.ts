@@ -135,7 +135,6 @@ export function injectPositive(values: number[]): number[] {
     let sum_list: number[] = values.reduce(
         (accumulator: number[], current_number: number): number[] => {
             sum += current_number;
-            
 
             if (current_number < 0 && !negative_found) {
                 accumulator.push(current_number);
@@ -145,13 +144,13 @@ export function injectPositive(values: number[]): number[] {
                 accumulator.push(current_number);
             }
 
-            if(!negative_found){
-                accumulator.push(sum);
-            }
             return accumulator;
         },
         [],
     );
+    if (!negative_found) {
+        sum_list.push(sum);
+    }
 
     return sum_list;
 }
