@@ -1,12 +1,13 @@
 import { Answer } from "./interfaces/answer";
 import { Question, QuestionType } from "./interfaces/question";
+import { makeBlankQuestion } from "./objects";
 
 /**
  * Consumes an array of questions and returns a new array with only the questions
  * that are `published`.
  */
 export function getPublishedQuestions(questions: Question[]): Question[] {
-    return questions.filter(question => question.published);
+    return questions.filter((question) => question.published);
 }
 
 /**
@@ -15,8 +16,12 @@ export function getPublishedQuestions(questions: Question[]): Question[] {
  * `expected`, and an empty array for its `options`.
  */
 export function getNonEmptyQuestions(questions: Question[]): Question[] {
-
-    return questions.filter(question => question.body.length > 0 && question.expected.length > 0 && question.options.length > 0);
+    return questions.filter(
+        (question) =>
+            question.body.length > 0 ||
+            question.expected.length > 0 ||
+            question.options.length > 0,
+    );
 }
 
 /***
@@ -27,6 +32,12 @@ export function findQuestion(
     questions: Question[],
     id: number,
 ): Question | null {
+    let findQ = questions.find((question: Question) => question.id === id);
+
+    if (findQ) {
+        return findQ;
+    }
+
     return null;
 }
 
@@ -36,7 +47,8 @@ export function findQuestion(
  * Hint: use filter
  */
 export function removeQuestion(questions: Question[], id: number): Question[] {
-    return [];
+    let removeQ = questions.filter((question) => question.id !== id);
+    return removeQ;
 }
 
 /***
@@ -45,7 +57,8 @@ export function removeQuestion(questions: Question[], id: number): Question[] {
  * Do not modify the input array.
  */
 export function getNames(questions: Question[]): string[] {
-    return [];
+    let getNames = questions.map((question): string => question.name);
+    return getNames;
 }
 
 /**
@@ -54,7 +67,15 @@ export function getNames(questions: Question[]): string[] {
  * making the `text` an empty string, and using false for both `submitted` and `correct`.
  */
 export function makeAnswers(questions: Question[]): Answer[] {
-    return [];
+    let answerList: Answer[] = questions.map(
+        (question): Answer => ({
+            questionId: question.id,
+            text: "",
+            submitted: false,
+            correct: false,
+        }),
+    );
+    return answerList;
 }
 
 /***
@@ -63,7 +84,13 @@ export function makeAnswers(questions: Question[]): Answer[] {
  * Hint: as usual, do not modify the input questions array
  */
 export function publishAll(questions: Question[]): Question[] {
-    return [];
+    let publishedQ: Question[] = questions.map(
+        (question): Question => ({
+            ...question,
+            published: true,
+        }),
+    );
+    return publishedQ;
 }
 
 /***
@@ -78,7 +105,10 @@ export function addNewQuestion(
     name: string,
     type: QuestionType,
 ): Question[] {
-    return [];
+
+    const newQuestion = makeBlankQuestion(id,name,type);
+
+    return [...questions, newQuestion];
 }
 
 /***
