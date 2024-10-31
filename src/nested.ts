@@ -105,8 +105,7 @@ export function addNewQuestion(
     name: string,
     type: QuestionType,
 ): Question[] {
-
-    const newQuestion = makeBlankQuestion(id,name,type);
+    const newQuestion = makeBlankQuestion(id, name, type);
 
     return [...questions, newQuestion];
 }
@@ -123,7 +122,15 @@ export function renameQuestionById(
     targetId: number,
     newName: string,
 ): Question[] {
-    return [];
+    return questions.map((question) => {
+        if (question.id === targetId) {
+            return {
+                ...question,
+                name: newName,
+            };
+        }
+        return question;
+    });
 }
 
 /**
@@ -144,5 +151,22 @@ export function editOption(
     targetOptionIndex: number,
     newOption: string,
 ): Question[] {
-    return [];
+    return questions.map((question) => {
+        if (question.id === targetId) {
+            if (targetOptionIndex === -1) {
+                return {
+                    ...question,
+                    options: [...question.options, newOption],
+                };
+            } else {
+                return {
+                    ...question,
+                    options: question.options.map((option, index) =>
+                        index === targetOptionIndex ? newOption : option,
+                    ),
+                };
+            }
+        }
+        return question;
+    });
 }
