@@ -8,9 +8,18 @@ import { Question, QuestionType } from "./interfaces/question";
 export function makeBlankQuestion(
     id: number,
     name: string,
-    type: QuestionType
+    type: QuestionType,
 ): Question {
-    return {};
+    return {
+        id: id,
+        name: name,
+        type: type,
+        body: "",
+        expected: "",
+        options: [],
+        points: 1,
+        published: false,
+    };
 }
 
 /**
@@ -21,6 +30,16 @@ export function makeBlankQuestion(
  * HINT: Look up the `trim` and `toLowerCase` functions.
  */
 export function isCorrect(question: Question, answer: string): boolean {
+    //trim/tolowercase answer(and maybe question.expected), and then check if they are equal to each other
+
+    let trim_answer: string = answer.trim();
+    let final_answer: string = trim_answer.toLowerCase();
+    let trim_question: string = question.expected.trim();
+    let final_question: string = trim_question.toLowerCase();
+
+    if (final_answer === final_question) {
+        return true;
+    }
     return false;
 }
 
@@ -31,7 +50,11 @@ export function isCorrect(question: Question, answer: string): boolean {
  * be exactly one of the options.
  */
 export function isValid(question: Question, answer: string): boolean {
-    return false;
+    if (question.type === "short_answer_question") {
+        return true;
+    }
+    let result: boolean = question.options.includes(answer);
+    return result;
 }
 
 /**
@@ -41,7 +64,14 @@ export function isValid(question: Question, answer: string): boolean {
  * name "My First Question" would become "9: My First Q".
  */
 export function toShortForm(question: Question): string {
-    return "";
+    let id_string: string = String(question.id);
+    let name_string: string = question.name;
+    let full_string: string = id_string.concat(
+        ": ",
+        name_string.substring(0, 10),
+    );
+
+    return full_string;
 }
 
 /**
@@ -62,7 +92,24 @@ export function toShortForm(question: Question): string {
  * Check the unit tests for more examples of what this looks like!
  */
 export function toMarkdown(question: Question): string {
-    return "";
+    function concat_func(option: string): string {
+        return "- " + option;
+    }
+
+    let result: string = `# ${question.name}\n${question.body}\n`;
+    if (question.type === "short_answer_question") {
+        return result.trim();
+    }
+
+    // if (question.type === "multiple_choice_question") {
+    //     let options: string = question.options.map(concat_func).join("\n");
+    //     result = result.concat(options);
+    // }
+
+    let options: string = question.options.map(concat_func).join("\n");
+    result = result.concat(options);
+
+    return result.trim();
 }
 
 /**
@@ -70,7 +117,13 @@ export function toMarkdown(question: Question): string {
  * `newName`.
  */
 export function renameQuestion(question: Question, newName: string): Question {
-    return question;
+    let new_version = {
+        ...question,
+        name: newName,
+        options: [...question.options],
+    };
+
+    return new_version;
 }
 
 /**
@@ -79,7 +132,13 @@ export function renameQuestion(question: Question, newName: string): Question {
  * published; if it was published, now it should be not published.
  */
 export function publishQuestion(question: Question): Question {
-    return question;
+    let new_question = {
+        ...question,
+        options: [...question.options],
+        published: !question.published,
+    }; //makes a copy of question so we can modify the copy's elements
+
+    return new_question;
 }
 
 /**
@@ -89,7 +148,15 @@ export function publishQuestion(question: Question): Question {
  * The `published` field should be reset to false.
  */
 export function duplicateQuestion(id: number, oldQuestion: Question): Question {
-    return oldQuestion;
+    let newQuestion = {
+        ...oldQuestion,
+        id: id,
+        name: `Copy of ${oldQuestion.name}`,
+        options: [...oldQuestion.options],
+        published: false,
+    };
+
+    return newQuestion;
 }
 
 /**
@@ -100,7 +167,9 @@ export function duplicateQuestion(id: number, oldQuestion: Question): Question {
  * Check out the subsection about "Nested Fields" for more information.
  */
 export function addOption(question: Question, newOption: string): Question {
-    return question;
+    let new_question = { ...question, options: [...question.options] };
+    new_question.options.push(newOption);
+    return new_question;
 }
 
 /**
@@ -115,7 +184,14 @@ export function mergeQuestion(
     id: number,
     name: string,
     contentQuestion: Question,
-    { points }: { points: number }
+    { points }: { points: number },
 ): Question {
-    return contentQuestion;
+    let newQuestion = {
+        ...contentQuestion,
+        id: id,
+        name: name,
+        points: points,
+        published: false,
+    };
+    return newQuestion;
 }
