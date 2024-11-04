@@ -28,7 +28,7 @@ export function TwoDice(): React.JSX.Element {
     if (die1 === 1 && die2 === 1) {
         message = "Lose";
     } else if (die1 === die2) {
-        message = "Win";
+        message = "Win";//adding a random comment so I can commit again
     }
     return (
         <div>
