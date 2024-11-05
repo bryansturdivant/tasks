@@ -148,7 +148,7 @@ export function injectPositive(values: number[]): number[] {
             if(!negative_found){
                 accumulator.push(sum);
             }
-            return accumulator;
+            return accumulator;//Random change for commit 
         },
         [],
     );
