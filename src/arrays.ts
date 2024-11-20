@@ -135,20 +135,19 @@ export function injectPositive(values: number[]): number[] {
     let sum_list: number[] = values.reduce(
         (accumulator: number[], current_number: number): number[] => {
             sum += current_number;
-            
 
             if (current_number < 0 && !negative_found) {
                 accumulator.push(current_number);
-                accumulator.push(sum - current_number);
+                accumulator.push(sum);
                 negative_found = true;
             } else {
                 accumulator.push(current_number);
             }
 
-            if(!negative_found){
-                accumulator.push(sum);
-            }
-            return accumulator;//Random change for commit 
+            // if(!negative_found){
+            //     accumulator.push(sum);
+            // }
+            return accumulator; //Random change for commit
         },
         [],
     );
